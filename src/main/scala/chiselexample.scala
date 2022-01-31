@@ -47,3 +47,29 @@ class SmallBoomConfig extends Config(
       case SystemBusKey => up(SystemBusKey).copy(beatBytes = 16)
     })
 )
+
+object verilogfriendlyexampletop extends App {
+  (new ChiselStage).run(Seq(
+    TargetDirAnnotation("./builds/chiselexamples"),
+    ChiselGeneratorAnnotation(() => new verilogfriendlyexample),
+    RunFirrtlTransformAnnotation(new VerilogEmitter)
+  ))
+}
+/** Global config. */
+object configexampletop extends App {
+  val myConfig = new MyConfig
+  (new ChiselStage).run(Seq(
+    TargetDirAnnotation("./builds/chiselexamples"),
+    ChiselGeneratorAnnotation(() => new ConfigExample()(myConfig)),
+    RunFirrtlTransformAnnotation(new VerilogEmitter)
+  ))
+}
+object diplomacyexampletop extends App {
+  val myConfig = new MyConfig
+  (new ChiselStage).run(Seq(
+    TargetDirAnnotation("./builds/chiselexamples"),
+    ChiselGeneratorAnnotation(() =>
+      LazyModule(new diplomacyexample()(myConfig)).module), // 注1
+    RunFirrtlTransformAnnotation(new VerilogEmitter)
+  ))
+}
