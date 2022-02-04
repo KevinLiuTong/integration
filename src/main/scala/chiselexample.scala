@@ -47,6 +47,13 @@ class SmallBoomConfig extends Config(
       case SystemBusKey => up(SystemBusKey).copy(beatBytes = 16)
     })
 )
+object fsmexampletop extends App {
+  (new ChiselStage).run(Seq(
+    TargetDirAnnotation("./builds/chiselexamples"),
+    ChiselGeneratorAnnotation(() => new FSMExample),
+    RunFirrtlTransformAnnotation(new VerilogEmitter)
+  ))
+}
 
 object verilogfriendlyexampletop extends App {
   (new ChiselStage).run(Seq(
