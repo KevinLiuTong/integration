@@ -55,6 +55,14 @@ object fsmexampletop extends App {
   ))
 }
 
+object arbexampletop extends App {
+  (new ChiselStage).run(Seq(
+    TargetDirAnnotation("./builds/chiselexamples"),
+    ChiselGeneratorAnnotation(() => new ArbExample),
+    RunFirrtlTransformAnnotation(new VerilogEmitter)
+  ))
+}
+
 object verilogfriendlyexampletop extends App {
   (new ChiselStage).run(Seq(
     TargetDirAnnotation("./builds/chiselexamples"),
