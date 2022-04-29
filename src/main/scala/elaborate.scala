@@ -13,6 +13,7 @@ import freechips.rocketchip.system.BaseConfig
 import freechips.rocketchip.tile.{TileKey, TileVisibilityNodeKey}
 import freechips.rocketchip.tilelink.{TLEphemeralNode, TLWidthWidget}
 import vlsu._
+import stone._
 class VLSUBoomConfig extends Config(
   new WithNSmallBooms(1) ++
     new WithCoherentBusTopology ++
@@ -32,6 +33,20 @@ object vlsutop extends App {
     Seq(
       TargetDirAnnotation("./builds/vlsu"),
       ChiselGeneratorAnnotation(() => new VLSUHarness(gp)(param)),
+      RunFirrtlTransformAnnotation(new VerilogEmitter)
+    )
+  )
+}
+
+//./mill integration.runMain "integration.carocktop"
+object stonetop extends App {
+  val cp = CustomerParameters()
+  val gp = GeneralParameters(cp)
+  val ap = ArchParameters(gp)
+  (new ChiselStage).run(
+    Seq(
+      TargetDirAnnotation("./builds/stone"),
+      ChiselGeneratorAnnotation(() => new StoneBackEnd(ap)),
       RunFirrtlTransformAnnotation(new VerilogEmitter)
     )
   )
